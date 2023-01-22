@@ -1,4 +1,7 @@
-use std::{collections::HashSet, hash::Hash};
+use std::{
+    collections::HashSet,
+    hash::Hash,
+};
 
 use num_integer::Integer;
 use unordered_pair::UnorderedPair;
@@ -44,23 +47,26 @@ mod tests {
         UnorderedPair,
     };
 
-    fn check_sum_pairs(numbers: &[i32], target: i32, expected: &[(i32, i32)]) {
-        let mut sum_pairs_found = find_sum_pairs(numbers, target);
-        sum_pairs_found.sort_by_key(|&UnorderedPair(a, b)| cmp::max(a, b));
-        let sum_pairs_found: Vec<(i32, i32)> = sum_pairs_found
-            .iter()
-            .map(|unordered_pair| unordered_pair.into_ordered_tuple())
-            .collect();
+    macro_rules! check_sum_pairs {
+        ($numbers:expr, $target:expr, $expected:expr) => {{
+            let mut sum_pairs_found = find_sum_pairs($numbers, $target);
+            sum_pairs_found.sort_by_key(|&UnorderedPair(a, b)| cmp::max(a, b));
+            let sum_pairs_found: Vec<_> = sum_pairs_found
+                .iter()
+                .map(|unordered_pair| unordered_pair.into_ordered_tuple())
+                .collect();
 
-        let mut sum_pairs_expected: Vec<UnorderedPair<i32>> =
-            expected.iter().map(|&(a, b)| UnorderedPair(a, b)).collect();
-        sum_pairs_expected.sort_by_key(|&UnorderedPair(a, b)| cmp::max(a, b));
-        let sum_pairs_expected: Vec<(i32, i32)> = sum_pairs_expected
-            .iter()
-            .map(|unordered_pair| unordered_pair.into_ordered_tuple())
-            .collect();
+            let mut sum_pairs_expected: Vec<UnorderedPair<_>> =
+                $expected.iter().map(|&(a, b)| UnorderedPair(a, b)).collect();
+            sum_pairs_expected
+                .sort_by_key(|&UnorderedPair(a, b)| cmp::max(a, b));
+            let sum_pairs_expected: Vec<_> = sum_pairs_expected
+                .iter()
+                .map(|unordered_pair| unordered_pair.into_ordered_tuple())
+                .collect();
 
-        assert_eq!(&sum_pairs_found, &sum_pairs_expected);
+            assert_eq!(&sum_pairs_found, &sum_pairs_expected);
+        }};
     }
 
     #[test]
@@ -69,6 +75,6 @@ mod tests {
         let target = 12;
         let expected = &[(12, 0), (5, 7), (16, -4)];
 
-        check_sum_pairs(numbers, target, expected);
+        check_sum_pairs!(numbers, target, expected);
     }
 }
