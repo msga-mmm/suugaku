@@ -56,8 +56,10 @@ mod tests {
                 .map(|unordered_pair| unordered_pair.into_ordered_tuple())
                 .collect();
 
-            let mut sum_pairs_expected: Vec<UnorderedPair<_>> =
-                $expected.iter().map(|&(a, b)| UnorderedPair(a, b)).collect();
+            let mut sum_pairs_expected: Vec<UnorderedPair<_>> = $expected
+                .iter()
+                .map(|&(a, b)| UnorderedPair(a, b))
+                .collect();
             sum_pairs_expected
                 .sort_by_key(|&UnorderedPair(a, b)| cmp::max(a, b));
             let sum_pairs_expected: Vec<_> = sum_pairs_expected
