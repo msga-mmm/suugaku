@@ -3,7 +3,10 @@ use std::{
     hash::Hash,
 };
 
-use num_integer::Integer;
+use num::{
+    CheckedSub,
+    Integer,
+};
 use unordered_pair::UnorderedPair;
 
 /// Finds pairs of numbers from a list that sum to the given target value.
@@ -12,25 +15,26 @@ use unordered_pair::UnorderedPair;
 /// also O(n).
 pub fn find_sum<T>(numbers: &[T], target: T) -> Vec<UnorderedPair<T>>
 where
-    T: Integer + Hash + Copy,
+    T: Integer + Hash + Copy + CheckedSub,
 {
-    let mut numbers_set: HashSet<T> = HashSet::new();
-
-    for number in numbers {
-        numbers_set.insert(*number);
-    }
+    let numbers_set: HashSet<T> = numbers.iter().copied().collect();
 
     let mut sum_pairs = Vec::new();
     let mut sum_pairs_found: HashSet<UnorderedPair<T>> = HashSet::new();
 
     for &number in numbers {
-        let difference = target - number;
+        let difference = target.checked_sub(&number);
 
-        if numbers_set.contains(&difference) {
-            let sum_pair = UnorderedPair(number, difference);
-            if !sum_pairs_found.contains(&sum_pair) {
-                sum_pairs.push(sum_pair);
-                sum_pairs_found.insert(sum_pair);
+        // skip if the difference is an overflow as it means it is a number
+        // lower or higher than the range of numbers allowed for the bits size
+        // of the target number
+        if let Some(difference) = difference {
+            if numbers_set.contains(&difference) {
+                let sum_pair = UnorderedPair(number, difference);
+                if !sum_pairs_found.contains(&sum_pair) {
+                    sum_pairs.push(sum_pair);
+                    sum_pairs_found.insert(sum_pair);
+                }
             }
         }
     }
@@ -78,5 +82,35 @@ mod tests {
         let expected = &[(12, 0), (5, 7), (16, -4)];
 
         check_sum_pairs!(numbers, target, expected);
+    }
+
+    use proptest::{
+        collection::vec,
+        num::i16,
+        prelude::*,
+    };
+
+    proptest! {
+        #[test]
+        fn each_sum_pair_should_equal_target(
+            numbers in vec(i16::ANY, 2..200),
+            target in i16::ANY
+        ) {
+            let sum_pairs_found = find_sum(&numbers, target);
+
+            for pair in sum_pairs_found {
+                let UnorderedPair(a, b) = pair;
+                let sum = a + b;
+
+                prop_assert_eq!(
+                    sum,
+                    target,
+                    "sum of '{:?}' is '{:?}' differing from target '{:?}'",
+                    pair,
+                    sum,
+                    target
+                );
+            }
+        }
     }
 }
