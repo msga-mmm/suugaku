@@ -6,6 +6,8 @@ jobs:
   clippy:
     name: Clippy
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
@@ -16,9 +18,8 @@ jobs:
             override: true
       - uses: actions-rs/clippy-check@v1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features -- -D clippy::pedantic
-    permissions:
-      pull-requests: write
 
   fmt:
     name: Rustfmt
