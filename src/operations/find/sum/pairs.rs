@@ -10,7 +10,7 @@ use unordered_pair::UnorderedPair;
 ///
 /// The time complexity of this function is O(n) and its space complexity is
 /// also O(n).
-pub fn find_sum_pairs<T>(numbers: &[T], target: T) -> Vec<UnorderedPair<T>>
+pub fn find_sum<T>(numbers: &[T], target: T) -> Vec<UnorderedPair<T>>
 where
     T: Integer + Hash + Copy,
 {
@@ -43,13 +43,13 @@ mod tests {
     use std::cmp;
 
     use super::{
-        find_sum_pairs,
+        find_sum,
         UnorderedPair,
     };
 
     macro_rules! check_sum_pairs {
         ($numbers:expr, $target:expr, $expected:expr) => {{
-            let mut sum_pairs_found = find_sum_pairs($numbers, $target);
+            let mut sum_pairs_found = find_sum($numbers, $target);
             sum_pairs_found.sort_by_key(|&UnorderedPair(a, b)| cmp::max(a, b));
             let sum_pairs_found: Vec<_> = sum_pairs_found
                 .iter()

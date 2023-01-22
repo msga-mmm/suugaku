@@ -1,1 +1,1 @@
-pub mod sum_pairs;
+pub mod sum;
