@@ -7,6 +7,8 @@ jobs:
     name: Clippy
     runs-on: ubuntu-latest
     permissions:
+      # checks permissions to mark a pull request valid if the checks are 
+      # successful
       checks: write
     steps:
       - uses: actions/checkout@v3
@@ -18,6 +20,8 @@ jobs:
             override: true
       - uses: actions-rs/clippy-check@v1
         with:
+          # token not needed as `permissions` field is defined but added as it 
+          # is a mandatory argument
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features -- -D clippy::pedantic
 
