@@ -1,0 +1,66 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  build_and_test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+          - os: macos-latest
+          - os: windows-latest
+        version:
+          - nightly
+
+    name: test - ${{ matrix.version }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@3
+
+      - name: Install ${{ matrix.version }}
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.version }}
+          override: true
+
+      - name: Generate Cargo.lock
+        uses: actions-rs/cargo@v1
+        with:
+          command: generate-lockfile
+
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ matrix.version }}-${{ matrix.os }}-cargo-registry-trimmed-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache cargo index
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/git
+          key: ${{ matrix.version }}-${{ matrix.os }}-cargo-index-trimmed-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        timeout-minutes: 30
+        with:
+          command: test
+          args: --all --all-features --no-fail-fast -- --nocapture
+
+      # remove crate source checkouts and git repository checkouts that do not 
+      # need to be cached.
+      #
+      # Reference: 
+      # https://github.com/matthiaskrgr/cargo-cache#cleaning-the-cache-on-ci
+      - name: Install cargo-cache
+        continue-on-error: true
+        run: |
+          cargo install cargo-cache --no-default-features --features ci-autoclean
+
+      - name: Clear the cargo caches
+        run: |
+          cargo-cache
