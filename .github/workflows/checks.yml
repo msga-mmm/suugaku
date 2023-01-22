@@ -23,7 +23,7 @@ jobs:
           # token not needed as `permissions` field is defined but added as it 
           # is a mandatory argument
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features -- -D clippy::pedantic
+          args: --all-features -- -D clippy::pedantic -D warnings
 
   fmt:
     name: Rustfmt
