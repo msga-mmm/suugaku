@@ -29,7 +29,7 @@ where
         // lower or higher than the range of numbers allowed for the bits size
         // of the target number
         if let Some(difference) = difference {
-            if numbers_set.contains(&difference) {
+            if difference != number && numbers_set.contains(&difference) {
                 let sum_pair = UnorderedPair(number, difference);
                 if !sum_pairs_found.contains(&sum_pair) {
                     sum_pairs.push(sum_pair);
@@ -80,6 +80,20 @@ mod tests {
         let numbers = &[1, 9, 5, 0, 20, -4, 12, 16, 7];
         let target = 12;
         let expected = &[(12, 0), (5, 7), (16, -4)];
+
+        check_sum_pairs!(numbers, target, expected);
+    }
+
+    /// Regression test:
+    ///
+    /// Each pair of numbers must be composed of two different numbers.
+    ///
+    /// Should return [] and not [(1,1)]
+    #[test]
+    fn pairs_cannot_have_duplicate_number() {
+        let numbers = &[1];
+        let target = 2;
+        let expected = &[];
 
         check_sum_pairs!(numbers, target, expected);
     }
