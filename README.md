@@ -22,3 +22,23 @@ A command line interface to do math operations.
    ```sh
    cargo run
    ```
+
+## USAGE
+
+### Getting help
+
+```sh
+cargo run -- help
+```
+
+or
+
+```sh
+cargo run -- --help
+```
+
+### Command example
+
+```sh
+cargo run -- find sum pairs --from 1,2,3,4,5 --target 5
+```
