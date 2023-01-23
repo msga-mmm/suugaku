@@ -1,6 +1,18 @@
 name: Rust tests
 
-on: [push, pull_request]
+on:
+  pull_request:
+    paths:
+      - "**/*.rs"
+      - "**/Cargo.lock"
+      - "**/Cargo.toml"
+      - "tests/**/*"
+  push:
+    paths:
+      - "**/*.rs"
+      - "**/Cargo.lock"
+      - "**/Cargo.toml"
+      - "tests/**/*"
 
 jobs:
   build_and_test:
