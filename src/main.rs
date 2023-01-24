@@ -1,3 +1,15 @@
+use clap::Parser;
+use suugaku::operations::Operation;
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    #[clap(subcommand)]
+    operation: Operation,
+}
+
 fn main() {
-    println!("Hello, world!");
+    let args = Args::parse();
+
+    Operation::handle(args.operation);
 }
