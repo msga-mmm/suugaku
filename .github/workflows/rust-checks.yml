@@ -1,6 +1,22 @@
-name: Checks
+name: Rust checks
 
-on: [push, pull_request]
+on:
+  pull_request:
+    paths:
+      - "**/*.rs"
+      - "**/Cargo.lock"
+      - "**/Cargo.toml"
+      - "rust-toolchain.toml"
+      - "rustfmt.toml"
+      - "clippy.toml"
+  push:
+    paths:
+      - "**/*.rs"
+      - "**/Cargo.lock"
+      - "**/Cargo.toml"
+      - "rust-toolchain.toml"
+      - "rustfmt.toml"
+      - "clippy.toml"
 
 jobs:
   clippy:
