@@ -8,8 +8,8 @@ description = "A command line interface to do math operations."
 
 [dependencies]
 clap = { version = "4.1.3", features = ["derive"] }
-num = "0.4.0"
 num-integer = "0.1.45"
+num-traits = "0.2.15"
 unordered-pair = "0.2.4"
 
 [dev-dependencies]
