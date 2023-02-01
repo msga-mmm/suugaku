@@ -13,7 +13,7 @@ impl Sum {
     pub fn run(&self) {
         match self {
             Self::Pairs(pairs) => {
-                pairs.run()
+                pairs.run();
             }
         }
     }

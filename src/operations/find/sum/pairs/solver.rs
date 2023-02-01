@@ -3,10 +3,8 @@ use std::{
     hash::Hash,
 };
 
-use num::{
-    CheckedSub,
-    Integer,
-};
+use num_integer::Integer;
+use num_traits::CheckedSub;
 use unordered_pair::UnorderedPair;
 
 /// Finds pairs of numbers from a list that sum to the given target value.
