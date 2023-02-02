@@ -1,7 +1,7 @@
 pub mod pairs;
 
 use clap::Subcommand;
-pub use pairs::Pairs;
+pub use pairs::model::Pairs;
 
 #[derive(Subcommand, Debug)]
 pub enum Sum {
