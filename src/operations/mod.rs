@@ -11,9 +11,9 @@ pub enum Operation {
 }
 
 impl Operation {
-    pub fn handle(operation: Self) {
-        match operation {
-            Operation::Find(find) => Find::handle(find),
+    pub fn run(&self) {
+        match self {
+            Self::Find(find) => find.run(),
         }
     }
 }

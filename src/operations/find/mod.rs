@@ -11,11 +11,9 @@ pub enum Find {
 }
 
 impl Find {
-    pub fn handle(find: Self) {
-        match find {
-            Find::Sum(sum) => {
-                Sum::handle(sum);
-            }
+    pub fn run(&self) {
+        match self {
+            Self::Sum(sum) => sum.run(),
         }
     }
 }

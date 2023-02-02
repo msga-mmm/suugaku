@@ -10,9 +10,9 @@ pub enum Sum {
 }
 
 impl Sum {
-    pub fn handle(sum: Self) {
-        match sum {
-            Sum::Pairs(pairs) => {
+    pub fn run(&self) {
+        match self {
+            Self::Pairs(pairs) => {
                 pairs.run();
             }
         }

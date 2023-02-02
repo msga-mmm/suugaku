@@ -10,6 +10,5 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-
-    Operation::handle(args.operation);
+    args.operation.run();
 }
